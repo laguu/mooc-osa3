@@ -63,7 +63,13 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/info', (request, response) => {
-  response.send(`puhelinluettelossa on ${persons.length} henkilön tiedot. ${new Date()}`)
+  Person
+    .find({})
+    .then(persons => {
+      response.send(`puhelinluettelossa on ${persons.length} henkilön tiedot. ${new Date()}`)
+    })
+    .catch(error => response(404).send({ error: 'couldn\'t fetch info' }))
+
 })
 
 app.get('/api/persons/:id', (request, response) => {
