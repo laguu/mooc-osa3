@@ -117,16 +117,36 @@ app.post('/api/persons', (request, response) => {
   //   return response.status(400).json({ error: 'person already exists' })
   // }
 
-  const person = new Person({
-    name: body.name,
-    number: body.number
-  })
+  Person
+    .findOne({ name: body.name })
+    .then(result => {
+      if (result) {
+        response.status(409).end()
+      } else {
+        const person = new Person({
+          name: body.name,
+          number: body.number
+        })
 
-  person
-    .save()
-    .then(savedPerson => {
-      response.json(formatPerson(savedPerson))
+        person
+          .save()
+          .then(savedPerson => {
+            response.json(formatPerson(savedPerson))
+          })
+      }
     })
+    // .then((result) => {
+    //   const person = new Person({
+    //     name: body.name,
+    //     number: body.number
+    //   })
+
+    //   person
+    //     .save()
+    //     .then(savedPerson => {
+    //       response.json(formatPerson(savedPerson))
+    //     })
+    // })
 })
 
 app.put('/api/persons/:id', (request, response) => {
