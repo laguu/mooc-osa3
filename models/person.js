@@ -2,13 +2,18 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 // korvaa url oman tietokantasi urlilla. ethän laita salasanaa Githubiin!
-const url = 'mongodb://seppo:taalasmaa1@ds115854.mlab.com:15854/puhelinluettelo'
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+const url = process.env.MONGODB_URI
+
+
 mongoose.connect(url)
 mongoose.Promise = global.Promise
 
-const personSchema = new Schema({ 
-  name: String, 
-  number: String 
+const personSchema = new Schema({
+  name: String,
+  number: String
 })
 
 const Person = mongoose.model('Person', personSchema)
